@@ -1,0 +1,74 @@
+[
+  {
+    "file": "/images/services/strategy.jpg",
+    "photographer": "C F",
+    "unsplash": "https://unsplash.com/photos/CLFveFXjwyk",
+    "alt": "brown rocky mountain under gray sky"
+  },
+  {
+    "file": "/images/services/branding.jpg",
+    "photographer": "Meriç Dağlı",
+    "unsplash": "https://unsplash.com/photos/G-Hy9u5AzbI",
+    "alt": "brown hair wallpaper"
+  },
+  {
+    "file": "/images/services/design.jpg",
+    "photographer": "Pawel Czerwinski",
+    "unsplash": "https://unsplash.com/photos/b5D7zjvY184",
+    "alt": "a black and green abstract background with curves"
+  },
+  {
+    "file": "/images/services/experience.jpg",
+    "photographer": "MirrorUp",
+    "unsplash": "https://unsplash.com/photos/uNkH5G_9Zog",
+    "alt": "a man standing in the middle of a road at sunset"
+  },
+  {
+    "file": "/images/services/technology.jpg",
+    "photographer": "Jayy Torres",
+    "unsplash": "https://unsplash.com/photos/PKwnU3Ob-ls",
+    "alt": "a very tall building with a lot of lights on it"
+  },
+  {
+    "file": "/images/services/product.jpg",
+    "photographer": "Milad Fakurian",
+    "unsplash": "https://unsplash.com/photos/nNpLEEdmUj0",
+    "alt": "a black and white photo of a black surface"
+  },
+  {
+    "file": "/images/cases/case-01.jpg",
+    "photographer": "Oğuzhan Oğuz",
+    "unsplash": "https://unsplash.com/photos/F8vGlT1Va-U",
+    "alt": "Cars driving on a road at sunset"
+  },
+  {
+    "file": "/images/cases/case-02.jpg",
+    "photographer": "Ahmet Yüksek ✪",
+    "unsplash": "https://unsplash.com/photos/HTkC9pFOx3Y",
+    "alt": "Sunset behind a mountain peak with clouds"
+  },
+  {
+    "file": "/images/cases/case-03-port.jpg",
+    "photographer": "Albert Stoynov",
+    "unsplash": "https://unsplash.com/photos/NfOZ_Of6DZU",
+    "alt": "Industrial port with cranes illuminated at night"
+  },
+  {
+    "file": "/images/cases/case-04.jpg",
+    "photographer": "Alex Kalinin",
+    "unsplash": "https://unsplash.com/photos/QLZHww9d52E",
+    "alt": "A building that has a lot of columns lit up at night"
+  },
+  {
+    "file": "/images/purpose.jpg",
+    "photographer": "Giovanni Bellato",
+    "unsplash": "https://unsplash.com/photos/uaGxZAfQ4Vs",
+    "alt": "Man silhouetted in doorway looking at sunset"
+  },
+  {
+    "file": "/images/cta.jpg",
+    "photographer": "Vitaly Otinov",
+    "unsplash": "https://unsplash.com/photos/JQy8n35ff8M",
+    "alt": "a building with a neon triangle on the side of it"
+  }
+]

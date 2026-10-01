@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { onIntroComplete } from "@/lib/intro";
 import { media } from "@/lib/motion";
+import { EarthGL } from "./earth-gl";
 import { GlobeRenderer, type GlobeReadout } from "./globe-renderer";
 
 type HeroGlobeProps = {
@@ -16,6 +17,7 @@ type HeroGlobeProps = {
 export default function HeroGlobe({ labels, onReady, onReadout }: HeroGlobeProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const glRef = useRef<HTMLCanvasElement>(null);
   const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const readoutRef = useRef(onReadout);
   readoutRef.current = onReadout;
@@ -23,17 +25,31 @@ export default function HeroGlobe({ labels, onReady, onReadout }: HeroGlobeProps
   useEffect(() => {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    const glCanvas = glRef.current;
+    if (!wrap || !canvas || !glCanvas) return;
 
     const reduced = window.matchMedia(media.reduced).matches;
+    const compact = window.innerWidth < 768;
+    const earth = EarthGL.create(glCanvas);
     const globe = new GlobeRenderer(canvas, {
       labels: labelRefs.current.filter((el): el is HTMLSpanElement => el !== null),
       onReadout: (r) => readoutRef.current?.(r),
-      compact: window.innerWidth < 768,
+      compact,
+      earth,
     });
 
+    let disposed = false;
+    earth
+      ?.load("/textures/earth-lights.jpg", "/textures/earth-land.jpg")
+      .then(() => !disposed && reduced && globe.still())
+      .catch(() => {
+        /* sem texturas: o globo de partículas continua funcionando sozinho */
+      });
+
     const ro = new ResizeObserver(([entry]) => {
-      if (entry) globe.resize(entry.contentRect.width, entry.contentRect.height);
+      if (!entry) return;
+      earth?.resize(entry.contentRect.width, entry.contentRect.height, compact ? 1.5 : 2);
+      globe.resize(entry.contentRect.width, entry.contentRect.height);
     });
     ro.observe(wrap);
 
@@ -61,6 +77,7 @@ export default function HeroGlobe({ labels, onReady, onReadout }: HeroGlobeProps
     onReady?.(globe);
 
     return () => {
+      disposed = true;
       offIntro();
       gsap.killTweensOf(globe);
       ro.disconnect();
@@ -69,12 +86,14 @@ export default function HeroGlobe({ labels, onReady, onReadout }: HeroGlobeProps
       window.removeEventListener("pointermove", move);
       document.documentElement.removeEventListener("pointerleave", leave);
       globe.destroy();
+      earth?.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div ref={wrapRef} className="absolute inset-0">
+      <canvas ref={glRef} className="absolute inset-0" aria-hidden="true" />
       <canvas ref={canvasRef} className="absolute inset-0" aria-hidden="true" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 max-md:hidden">
         {labels.map((label, i) => (

@@ -1,11 +1,13 @@
 import { clamp, seeded } from "@/lib/motion";
+import type { EarthGL } from "./earth-gl";
 
 /**
  * Globo de partículas em Canvas 2D.
  *
- * Direção de arte: uma "esfera de negócios" feita do quadrado da marca.
- * Massas mais densas sugerem território, arcos laranja conectam pontos
- * com pulsos de informação, e duas órbitas carregam os pilares da MSATech.
+ * Direção de arte: a Terra à noite (WebGL, ver earth-gl.ts) com uma rede
+ * laranja ligando cidades reais — São Paulo como hub — e duas órbitas que
+ * carregam os pilares da MSATech. As partículas quadradas (o "pixel" da marca)
+ * formam o planeta na entrada e o dissolvem no scroll.
  *
  * Interação: o globo inclina na direção do ponteiro, partículas próximas
  * se afastam e linhas finas conectam o cursor aos nós mais próximos.
@@ -14,7 +16,8 @@ import { clamp, seeded } from "@/lib/motion";
 
 const FG = "238, 236, 231";
 const ORANGE = "241, 118, 49";
-const CAMERA = 3.4;
+// Quase ortográfica: mantém o canvas alinhado à esfera analítica do WebGL.
+const CAMERA = 40;
 const ARC_SAMPLES = 44;
 const RING_SAMPLES = 180;
 
@@ -24,8 +27,56 @@ type Label = { el: HTMLElement; ring: number; angle: number; speed: number; opac
 
 export type GlobeReadout = { rotation: number; x: number; y: number };
 
+/** Cidades conectadas pela rede (lat, lon). */
+const CITIES: Record<string, [number, number]> = {
+  saoPaulo: [-23.55, -46.63],
+  buenosAires: [-34.6, -58.38],
+  bogota: [4.71, -74.07],
+  mexico: [19.43, -99.13],
+  newYork: [40.71, -74.0],
+  miami: [25.76, -80.19],
+  losAngeles: [34.05, -118.24],
+  lisbon: [38.72, -9.14],
+  london: [51.5, -0.12],
+  lagos: [6.52, 3.38],
+  johannesburg: [-26.2, 28.05],
+  dubai: [25.2, 55.27],
+  mumbai: [19.08, 72.88],
+  singapore: [1.35, 103.82],
+  tokyo: [35.68, 139.69],
+};
+
+const ROUTES: [string, string][] = [
+  ["saoPaulo", "newYork"],
+  ["saoPaulo", "lisbon"],
+  ["saoPaulo", "london"],
+  ["saoPaulo", "bogota"],
+  ["saoPaulo", "buenosAires"],
+  ["saoPaulo", "johannesburg"],
+  ["saoPaulo", "miami"],
+  ["saoPaulo", "lagos"],
+  ["bogota", "mexico"],
+  ["mexico", "losAngeles"],
+  ["miami", "newYork"],
+  ["newYork", "london"],
+  ["lisbon", "london"],
+  ["london", "dubai"],
+  ["lagos", "johannesburg"],
+  ["dubai", "mumbai"],
+  ["mumbai", "singapore"],
+  ["singapore", "tokyo"],
+];
+
+/** Mesma convenção do shader: x = cosφ·cosλ, y = sinφ, z = −cosφ·sinλ. */
+function toVec([lat, lon]: [number, number]): [number, number, number] {
+  const φ = (lat * Math.PI) / 180;
+  const λ = (lon * Math.PI) / 180;
+  return [Math.cos(φ) * Math.cos(λ), Math.sin(φ), -Math.cos(φ) * Math.sin(λ)];
+}
+
 export type GlobeOptions = {
   labels: HTMLElement[];
+  earth?: EarthGL | null;
   onReadout?: (r: GlobeReadout) => void;
   compact?: boolean;
 };
@@ -52,13 +103,14 @@ export class GlobeRenderer {
   private pos = new Float32Array(0);
   private kind = new Uint8Array(0);
   private spread = new Float32Array(0);
-  private hubs: number[] = [];
+  private hubs: [number, number, number][] = [];
   private arcs: Arc[] = [];
   private rings: Ring[] = [];
   private labels: Label[] = [];
 
   private pointer = { x: 0, y: 0, tx: 0, ty: 0, sx: -1e4, sy: -1e4, active: false };
-  private rotY = 0.6;
+  // Começa com as Américas e o Atlântico de frente.
+  private rotY = -0.95;
   private time = 0;
   private frame = 0;
   private raf = 0;
@@ -96,7 +148,6 @@ export class GlobeRenderer {
     this.kind = new Uint8Array(n);
     this.spread = new Float32Array(n);
     const golden = Math.PI * (3 - Math.sqrt(5));
-    const land: number[] = [];
 
     for (let i = 0; i < n; i++) {
       const y = 1 - (i / (n - 1)) * 2;
@@ -113,24 +164,15 @@ export class GlobeRenderer {
       const isLand = field > 0.12;
       this.kind[i] = isLand ? (rand() < 0.055 ? 2 : 1) : 0;
       this.spread[i] = 0.6 + rand() * 1.8;
-      if (isLand) land.push(i);
     }
 
-    // Hubs bem distribuídos sobre a "terra" e arcos entre pares distantes.
-    this.hubs = [];
-    for (let k = 0; k < 11 && land.length; k++) {
-      const idx = land[Math.floor(rand() * land.length)]!;
-      if (this.hubs.every((h) => this.angleBetween(h, idx) > 0.55)) this.hubs.push(idx);
-    }
-    this.arcs = [];
-    for (let a = 0; a < this.hubs.length; a++) {
-      const b = (a + 3) % this.hubs.length;
-      const ia = this.hubs[a]!;
-      const ib = this.hubs[b]!;
-      const omega = this.angleBetween(ia, ib);
-      if (omega < 0.45 || omega > 1.7) continue;
-      this.arcs.push({ pts: this.slerpArc(ia, ib, omega), speed: 0.16 + rand() * 0.12, offset: rand() * 2 });
-    }
+    // Rede: cidades reais e rotas entre elas.
+    this.hubs = Object.values(CITIES).map(toVec);
+    this.arcs = ROUTES.map(([a, b]) => {
+      const va = toVec(CITIES[a]!);
+      const vb = toVec(CITIES[b]!);
+      return { pts: this.slerpArc(va, vb), speed: 0.14 + rand() * 0.12, offset: rand() * 2 };
+    });
 
     this.rings = [
       { radius: 1.42, tiltX: 1.18, tiltZ: 0.32, dashed: false },
@@ -145,22 +187,16 @@ export class GlobeRenderer {
     }));
   }
 
-  private angleBetween(a: number, b: number) {
-    const p = this.pos;
-    const dot = p[a * 3]! * p[b * 3]! + p[a * 3 + 1]! * p[b * 3 + 1]! + p[a * 3 + 2]! * p[b * 3 + 2]!;
-    return Math.acos(clamp(dot, -1, 1));
-  }
-
-  private slerpArc(a: number, b: number, omega: number) {
+  private slerpArc(a: [number, number, number], b: [number, number, number]) {
     const out = new Float32Array(ARC_SAMPLES * 3);
-    const p = this.pos;
-    const s = Math.sin(omega);
+    const omega = Math.acos(clamp(a[0] * b[0] + a[1] * b[1] + a[2] * b[2], -1, 1));
+    const s = Math.sin(omega) || 1;
     for (let i = 0; i < ARC_SAMPLES; i++) {
       const t = i / (ARC_SAMPLES - 1);
       const k1 = Math.sin((1 - t) * omega) / s;
       const k2 = Math.sin(t * omega) / s;
-      const lift = 1 + 0.07 * omega * Math.sin(Math.PI * t);
-      for (let c = 0; c < 3; c++) out[i * 3 + c] = (p[a * 3 + c]! * k1 + p[b * 3 + c]! * k2) * lift;
+      const lift = 1 + 0.09 * omega * Math.sin(Math.PI * t);
+      for (let c = 0; c < 3; c++) out[i * 3 + c] = (a[c]! * k1 + b[c]! * k2) * lift;
     }
     return out;
   }
@@ -238,7 +274,7 @@ export class GlobeRenderer {
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const halo = g.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.9);
-    halo.addColorStop(0, `rgba(${ORANGE}, 0.07)`);
+    halo.addColorStop(0, `rgba(${ORANGE}, ${this.opts.earth ? 0.03 : 0.07})`);
     halo.addColorStop(0.3, `rgba(13, 107, 117, 0.05)`);
     halo.addColorStop(1, "rgba(0,0,0,0)");
     g.fillStyle = halo;
@@ -248,10 +284,12 @@ export class GlobeRenderer {
     body.addColorStop(0, "rgba(13, 107, 117, 0.26)");
     body.addColorStop(0.55, "rgba(2, 71, 79, 0.12)");
     body.addColorStop(1, "rgba(5, 6, 7, 0.55)");
-    g.beginPath();
-    g.arc(cx, cy, R, 0, Math.PI * 2);
-    g.fillStyle = body;
-    g.fill();
+    if (!this.opts.earth) {
+      g.beginPath();
+      g.arc(cx, cy, R, 0, Math.PI * 2);
+      g.fillStyle = body;
+      g.fill();
+    }
 
     // Luz de borda: um "nascer do sol" no quadrante superior direito.
     const flareA = -0.85;
@@ -309,7 +347,7 @@ export class GlobeRenderer {
     const p = this.pointer;
     this.time += dt;
     this.frame++;
-    this.rotY += dt * 0.07;
+    this.rotY += dt * 0.035;
 
     p.x += (p.tx - p.x) * Math.min(1, dt * 2.6);
     p.y += (p.ty - p.y) * Math.min(1, dt * 2.6);
@@ -334,6 +372,12 @@ export class GlobeRenderer {
 
     this.setRotation(ry, rx);
 
+    const earth = this.opts.earth;
+    const hasEarth = Boolean(earth?.ready);
+    earth?.draw({ cx, cy, R, ry, rx, alpha: formed * formed * (1 - this.scatter * 0.6) });
+    // Com a Terra formada, as partículas viram poeira; ao dispersar, voltam a dominar.
+    const dust = hasEarth ? 0.12 + 0.88 * ease : 1;
+
     // Graticule: equador + dois meridianos, muito sutis.
     if (formed > 0.02) {
       ctx.lineWidth = 0.6;
@@ -355,7 +399,7 @@ export class GlobeRenderer {
           else ctx.moveTo(this.px, this.py);
           started = true;
         }
-        ctx.strokeStyle = `rgba(${FG}, ${0.07 * formed})`;
+        ctx.strokeStyle = `rgba(${FG}, ${(hasEarth ? 0.035 : 0.07) * formed})`;
         ctx.stroke();
       }
     }
@@ -379,7 +423,7 @@ export class GlobeRenderer {
 
       const depth = z > 0 ? 0.35 + 0.65 * z : 0.06 + 0.26 * (1 + z);
       const base = k === 0 ? 0.3 : k === 1 ? 0.9 : 1;
-      let alpha = base * (formed > 0.5 ? depth : depth * formed + 0.35 * (1 - formed)) * (1 - this.scatter * 0.75);
+      let alpha = base * (formed > 0.5 ? depth : depth * formed + 0.35 * (1 - formed)) * (1 - this.scatter * 0.75) * dust;
 
       if (p.active) {
         const dx = sx - p.sx;
@@ -417,7 +461,7 @@ export class GlobeRenderer {
     ctx.globalAlpha = 1;
 
     if (formed > 0.05) {
-      this.drawArcs(cx, cy, formed);
+      this.drawArcs(cx, cy, formed, hasEarth);
       this.drawHubs(cx, cy, formed);
     }
     this.drawRings(cx, cy, formed, dt);
@@ -445,11 +489,11 @@ export class GlobeRenderer {
     }
   }
 
-  private drawArcs(cx: number, cy: number, formed: number) {
+  private drawArcs(cx: number, cy: number, formed: number, bright: boolean) {
     const { ctx, R } = this;
     ctx.lineWidth = 0.8;
     for (const arc of this.arcs) {
-      ctx.strokeStyle = `rgba(${ORANGE}, ${0.18 * formed})`;
+      ctx.strokeStyle = `rgba(${ORANGE}, ${(bright ? 0.3 : 0.18) * formed})`;
       ctx.beginPath();
       let started = false;
       for (let i = 0; i < ARC_SAMPLES; i++) {
@@ -507,8 +551,8 @@ export class GlobeRenderer {
   private drawHubs(cx: number, cy: number, formed: number) {
     const { ctx, R } = this;
     for (let k = 0; k < this.hubs.length; k++) {
-      const i = this.hubs[k]!;
-      this.project(this.pos[i * 3]!, this.pos[i * 3 + 1]!, this.pos[i * 3 + 2]!, cx, cy, R);
+      const [hx, hy, hz] = this.hubs[k]!;
+      this.project(hx, hy, hz, cx, cy, R);
       if (this.pz < 0.05) continue;
       const a = this.pz * formed;
       ctx.fillStyle = `rgba(${ORANGE}, ${a})`;
@@ -551,7 +595,7 @@ export class GlobeRenderer {
       for (let i = 0; i <= RING_SAMPLES; i++) {
         const [x, y, z] = pointOn((i / RING_SAMPLES) * Math.PI * 2);
         this.project(x, y, z, cx, cy, R);
-        const a = (this.occluded ? 0 : this.pz < 0 ? 0.07 : 0.1 + this.pz * 0.22) * formed;
+        const a = (this.occluded ? 0 : this.pz < 0 ? 0.08 : 0.16 + this.pz * 0.3) * formed;
         if (i > 0 && a > 0.005) {
           ctx.strokeStyle = `rgba(${FG}, ${a})`;
           ctx.beginPath();

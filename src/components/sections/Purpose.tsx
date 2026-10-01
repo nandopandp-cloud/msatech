@@ -1,69 +1,14 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import Image from "next/image";
+import { useRef } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { media, seeded } from "@/lib/motion";
+import { media } from "@/lib/motion";
 import { sectionIndex } from "@/content/sections";
 import { useReveal } from "@/hooks/useReveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const BELIEFS = ["entender.", "Questionar.", "Criar.", "Testar.", "E construir a solução certa."];
-
-function ridge(seed: number, base: number, amp: number, freq: number) {
-  const r = seeded(seed);
-  const ph = [r() * 6, r() * 6, r() * 6];
-  let d = `M0 800 L0 ${base}`;
-  for (let x = 0; x <= 1200; x += 8) {
-    const ridged = (v: number) => (1 - Math.abs(Math.sin(v))) ** 2;
-    const n =
-      0.62 * ridged(x * freq + ph[0]!) +
-      0.28 * ridged(x * freq * 2.3 + ph[1]!) +
-      0.1 * ridged(x * freq * 5.7 + ph[2]!) +
-      0.04 * Math.sin(x * freq * 13 + ph[0]!);
-    d += ` L${x} ${(base - amp * n).toFixed(1)}`;
-  }
-  return `${d} L1200 800 Z`;
-}
-
-/** Paisagem gerada — sem fotos de banco: cada camada é uma cordilheira procedural. */
-function Horizon() {
-  const layers = useMemo(
-    () => [
-      { d: ridge(3, 520, 150, 0.006), fill: "#7a4128", opacity: 0.5, depth: 0.2 },
-      { d: ridge(11, 585, 170, 0.0048), fill: "#43261b", opacity: 0.9, depth: 0.45 },
-      { d: ridge(23, 660, 150, 0.0042), fill: "#1d1411", opacity: 1, depth: 0.7 },
-      { d: ridge(41, 745, 110, 0.0036), fill: "#0b0909", opacity: 1, depth: 1 },
-    ],
-    [],
-  );
-
-  return (
-    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 size-full" aria-hidden="true">
-      <defs>
-        <linearGradient id="purpose-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#090b0d" />
-          <stop offset="0.38" stopColor="#1f1612" />
-          <stop offset="0.6" stopColor="#7a3d1f" />
-          <stop offset="0.7" stopColor="#e07d43" />
-          <stop offset="0.76" stopColor="#ffc59a" />
-        </linearGradient>
-        <radialGradient id="purpose-sun" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor="#fff1e2" />
-          <stop offset="0.12" stopColor="#ffc89c" stopOpacity="0.95" />
-          <stop offset="0.35" stopColor="#f17631" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#f17631" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <rect width="1200" height="800" fill="url(#purpose-sky)" />
-      <g data-sun>
-        <circle cx="760" cy="560" r="420" fill="url(#purpose-sun)" />
-      </g>
-      {layers.map((l, i) => (
-        <path key={i} data-depth={l.depth} d={l.d} fill={l.fill} fillOpacity={l.opacity} />
-      ))}
-    </svg>
-  );
-}
 
 export function Purpose() {
   const rootRef = useRef<HTMLElement>(null);
@@ -82,11 +27,11 @@ export function Purpose() {
           { clipPath: "inset(14% 10% 14% 10% round 28px)" },
           { clipPath: "inset(0% 0% 0% 0% round 20px)", ease: "none", scrollTrigger: { trigger: scene, start: "top 95%", end: "top 25%", scrub: true } },
         );
-        gsap.utils.toArray<SVGPathElement>("[data-depth]", root).forEach((layer) => {
-          const depth = Number(layer.dataset.depth);
-          gsap.fromTo(layer, { y: depth * 70 }, { y: -depth * 50, ease: "none", scrollTrigger: { trigger: scene, start: "top bottom", end: "bottom top", scrub: true } });
-        });
-        gsap.fromTo("[data-sun]", { y: 70 }, { y: -60, ease: "none", scrollTrigger: { trigger: scene, start: "top bottom", end: "bottom top", scrub: true } });
+        gsap.fromTo(
+          "[data-scene-media]",
+          { yPercent: -8, scale: 1.16 },
+          { yPercent: 8, scale: 1.04, ease: "none", scrollTrigger: { trigger: scene, start: "top bottom", end: "bottom top", scrub: true } },
+        );
 
         // Crenças: cada palavra acende conforme a leitura avança.
         gsap.fromTo(
@@ -151,12 +96,18 @@ export function Purpose() {
 
         <figure className="relative lg:col-span-7">
           <div data-scene className="relative aspect-[4/5] overflow-hidden rounded-[20px] md:aspect-[5/4] lg:sticky lg:top-24 lg:aspect-auto lg:h-[min(78vh,760px)]" data-cursor="view">
-            <Horizon />
-            {/* Caixilho: a vista é emoldurada como uma janela de arquitetura */}
+            <div data-scene-media className="absolute inset-0 will-change-transform">
+              <Image
+                src="/images/purpose.jpg"
+                alt="Pessoa observando montanhas ao pôr do sol através de uma grande janela"
+                fill
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className="object-cover object-[46%_center]"
+              />
+            </div>
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-y-0 left-[63%] w-[6px] bg-ink/90" />
-              <div className="absolute inset-x-0 top-0 h-[7%] bg-gradient-to-b from-ink to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-[22%] bg-gradient-to-t from-ink/90 to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-[12%] bg-gradient-to-b from-ink/70 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-[28%] bg-gradient-to-t from-ink/90 to-transparent" />
             </div>
             <figcaption className="t-micro absolute bottom-5 left-5 right-5 flex justify-between text-fg/55">
               <span>Fig. 01 — O próximo horizonte</span>

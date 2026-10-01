@@ -18,7 +18,7 @@ Variável opcional: `NEXT_PUBLIC_SITE_URL` (URL canônica usada em metadados, Op
 | # | Seção | Ideia | Técnica principal |
 |---|---|---|---|
 | — | Intro | A marca se desenha | Traçado SVG dos paths originais, 1x por sessão, pulável |
-| 00 | Hero | "Transformamos ideias em experiências…" | Globo em Canvas 2D: partículas quadradas, arcos, órbitas; reage ao cursor; dispersa no scroll |
+| 00 | Hero | "Transformamos ideias em experiências…" | Terra em WebGL2 (texturas NASA) + rede laranja entre cidades reais, órbitas e rótulos em Canvas 2D; reage ao cursor; forma-se e dissolve-se em partículas |
 | 01 | O que somos | Estratégia → … → Negócio | Seção fixada, cadeia que acende elo por elo |
 | 02 | Serviços | "Tudo começa com o desafio." | Painéis em perspectiva (tabs acessíveis) / acordeão no mobile |
 | 03 | Processo | Do desafio à solução | Partículas que se reorganizam a cada etapa + trilho horizontal |
@@ -47,6 +47,8 @@ src/
   hooks/                useReveal, useMagnetic, useTilt, useMediaQuery, useInView
   lib/                  gsap, motion (tokens), intro, contact (contrato do formulário)
 public/assets/          msatech-logo.svg / .png (arquivos oficiais)
+public/images/          fotos (serviços, cases, propósito, CTA) + credits.json
+public/textures/        texturas da Terra (luzes noturnas e continentes)
 docs/reference/         referência visual usada na direção de arte
 ```
 
@@ -54,11 +56,19 @@ docs/reference/         referência visual usada na direção de arte
 
 Nada foi inventado: tudo que depende de dado real está marcado e centralizado em `src/content/`.
 
-- **Cases** — `content/cases.ts`. Troque `client`, `title`, `segment`, `year` e `story`. Para usar foto, coloque em `/public/cases/` e preencha `image` (sem imagem, a capa generativa `art` é usada). Com `href`, o card vira link para uma página dedicada; sem `href`, abre no modal.
+- **Cases** — `content/cases.ts`. Troque `client`, `title`, `segment`, `year` e `story`. Troque a foto ilustrativa em `/public/images/cases/` e o campo `image` (`imagePosition` ajusta o enquadramento). Com `href`, o card vira link para uma página dedicada; sem `href`, abre no modal.
 - **Números** — `content/stats.ts`. `value: null` exibe "XX"; ao informar um número, o count-up acontece automaticamente.
 - **Clientes** — `content/clients.ts`. Informe `name` e `logo` (SVG monocromático claro em `/public/clients/`).
 - **Contato e redes** — `content/site.ts` (`contact.email`, `contact.phone`, `social[].href`, `group.url`). Campos `null` não aparecem.
 - **Formulário** — a validação é compartilhada (`lib/contact.ts`). Para integrar CRM/e-mail/webhook, altere apenas `app/api/contact/route.ts`.
+
+## Imagens e licenças
+
+- **Fotos** (`public/images/`): [Unsplash License](https://unsplash.com/license) — uso comercial gratuito, sem atribuição obrigatória. Autor e link de cada foto em `public/images/credits.json`.
+- **Cases**: as fotos atuais são **ilustrativas**. Substitua pelas imagens reais de cada projeto (mantendo títulos e clientes reais nos dados).
+- **Texturas da Terra** (`public/textures/`): NASA Black Marble / Blue Marble — domínio público.
+- Ao trocar uma imagem, use um **nome de arquivo novo**: o otimizador de imagens (local e na Vercel) guarda cache por URL.
+- Sem `image` nos dados, serviços e cases voltam automaticamente para a arte generativa em SVG.
 
 ## Movimento, performance e acessibilidade
 

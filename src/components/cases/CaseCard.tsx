@@ -24,7 +24,7 @@ export function CaseCard({ item, index, total, aspect, onOpen }: CaseCardProps) 
     <div ref={tiltRef} className={cn("relative overflow-hidden rounded-[1.25rem] bg-ink-3", aspect)}>
       <div data-case-media className="absolute inset-0 transition-transform duration-[1400ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]">
         {item.image ? (
-          <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: item.imagePosition }} />
         ) : (
           <CaseArt variant={item.art} />
         )}

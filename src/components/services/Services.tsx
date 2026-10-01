@@ -9,7 +9,7 @@ import { sectionIndex } from "@/content/sections";
 import { useReveal } from "@/hooks/useReveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Arrow } from "@/components/ui/Arrow";
-import { ServiceVisual } from "./ServiceVisual";
+import { ServiceMedia } from "./ServiceMedia";
 
 /**
  * "Tudo começa com o desafio." — uma folha clara que sobe sobre o escuro.
@@ -200,8 +200,8 @@ export function Services() {
                       )}
                       style={{ flexBasis: 0 }}
                     >
-                      <div className={cn("absolute inset-0 transition-[transform,filter] duration-[1400ms] ease-[var(--ease-out-expo)]", isActive ? "scale-100 brightness-100" : "scale-[1.18] brightness-[0.6] saturate-50")}>
-                        <ServiceVisual id={s.id} />
+                      <div className={cn("absolute inset-0 transition-[transform,filter] duration-[1400ms] ease-[var(--ease-out-expo)]", isActive ? "scale-100 brightness-100" : "scale-[1.18] brightness-[0.78] saturate-[0.8]")}>
+                        <ServiceMedia service={s} sizes="(min-width: 1024px) 40vw, 1px" />
                       </div>
                       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-transparent" />
                       <span className="t-micro absolute left-4 top-4 text-fg/60">{s.index}</span>
@@ -259,7 +259,7 @@ export function Services() {
                       <div className="overflow-hidden">
                         <div className="pb-8">
                           <div className="relative h-56 overflow-hidden rounded-2xl bg-ink sm:h-72">
-                            <ServiceVisual id={s.id} />
+                            <ServiceMedia service={s} sizes="(max-width: 1023px) 100vw, 1px" />
                           </div>
                           <p className="mt-5 text-xl font-semibold leading-snug tracking-[-0.02em]">{s.statement}</p>
                           <ul className="mt-4 flex flex-wrap gap-2">

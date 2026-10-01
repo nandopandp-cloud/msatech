@@ -14,11 +14,16 @@ export type Service = {
   capabilities: string[];
   /** Tom da atmosfera da seção quando o serviço está ativo. */
   tone: string;
+  /** Foto do painel (em /public). Sem foto, a arte generativa é usada. */
+  image?: string;
+  /** Aquece fotos frias com a cor da marca. */
+  warm?: boolean;
 };
 
 export const services: Service[] = [
   {
     id: "strategy",
+    image: "/images/services/strategy.jpg",
     index: "01",
     title: "Estratégia",
     statement: "Antes de construir qualquer coisa, entendemos para onde você precisa ir.",
@@ -33,6 +38,7 @@ export const services: Service[] = [
   },
   {
     id: "branding",
+    image: "/images/services/branding.jpg",
     index: "02",
     title: "Branding",
     statement: "Marcas fortes não apenas aparecem. Elas ocupam espaço na mente das pessoas.",
@@ -47,6 +53,7 @@ export const services: Service[] = [
   },
   {
     id: "design",
+    image: "/images/services/design.jpg",
     index: "03",
     title: "Design",
     statement: "Transformamos estratégia em experiências simples, intuitivas e memoráveis.",
@@ -55,6 +62,7 @@ export const services: Service[] = [
   },
   {
     id: "experience",
+    image: "/images/services/experience.jpg",
     index: "04",
     title: "Experiência",
     statement: "Cada interação é uma oportunidade de criar valor.",
@@ -69,6 +77,7 @@ export const services: Service[] = [
   },
   {
     id: "technology",
+    image: "/images/services/technology.jpg",
     index: "05",
     title: "Tecnologia",
     statement: "Construímos a infraestrutura digital que transforma ideias em realidade.",
@@ -77,6 +86,8 @@ export const services: Service[] = [
   },
   {
     id: "product",
+    image: "/images/services/product.jpg",
+    warm: true,
     index: "06",
     title: "Produto",
     statement: "Da primeira hipótese ao produto que escala.",

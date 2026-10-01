@@ -3,8 +3,8 @@
  *
  * Para publicar um case real:
  * 1. Substitua `client`, `title`, `segment`, `year` e os textos de `story`.
- * 2. Adicione uma imagem em /public/cases/<slug>.jpg e informe em `image`
- *    (sem imagem, a arte generativa `art` é usada como capa).
+ * 2. Troque a imagem em /public/images/cases/<slug>.jpg (as atuais são fotos
+ *    ilustrativas do Unsplash). Sem `image`, a arte generativa `art` vira a capa.
  * 3. Opcional: `href` aponta para uma página dedicada (ex.: /cases/<slug>).
  *    Sem `href`, o case abre no modal.
  */
@@ -19,6 +19,8 @@ export type CaseStudy = {
   services: string[];
   art: CaseArt;
   image?: string;
+  /** Enquadramento da foto (CSS object-position), ex.: "80% center". */
+  imagePosition?: string;
   href?: string;
   story: {
     challenge: string;
@@ -36,6 +38,7 @@ const placeholderStory = {
 export const cases: CaseStudy[] = [
   {
     slug: "case-01",
+    image: "/images/cases/case-01.jpg",
     client: "Cliente 01",
     title: "Título do projeto 01",
     segment: "Segmento",
@@ -46,6 +49,7 @@ export const cases: CaseStudy[] = [
   },
   {
     slug: "case-02",
+    image: "/images/cases/case-02.jpg",
     client: "Cliente 02",
     title: "Título do projeto 02",
     segment: "Segmento",
@@ -56,6 +60,8 @@ export const cases: CaseStudy[] = [
   },
   {
     slug: "case-03",
+    image: "/images/cases/case-03-port.jpg",
+    imagePosition: "78% center",
     client: "Cliente 03",
     title: "Título do projeto 03",
     segment: "Segmento",
@@ -66,6 +72,7 @@ export const cases: CaseStudy[] = [
   },
   {
     slug: "case-04",
+    image: "/images/cases/case-04.jpg",
     client: "Cliente 04",
     title: "Título do projeto 04",
     segment: "Segmento",

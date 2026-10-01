@@ -73,7 +73,7 @@ export function CaseModal({ item, next, onClose, onNavigate }: CaseModalProps) {
           </div>
 
           <div className="relative aspect-[16/8] overflow-hidden">
-            {item.image ? <Image src={item.image} alt="" fill sizes="1280px" className="object-cover" /> : <CaseArt variant={item.art} />}
+            {item.image ? <Image src={item.image} alt="" fill sizes="1280px" className="object-cover" style={{ objectPosition: item.imagePosition }} /> : <CaseArt variant={item.art} />}
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/20 to-transparent" />
           </div>
 
