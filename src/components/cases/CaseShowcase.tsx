@@ -39,7 +39,10 @@ export function CaseShowcase({ showcase, sizes }: { showcase: Showcase; sizes: s
 
       {/* Tela do produto */}
       <div className="absolute left-[24%] top-[16%] w-[86%] origin-left max-sm:left-[30%] max-sm:top-[9%] max-sm:opacity-60 transition-transform duration-[1400ms] ease-[var(--ease-out-expo)] [transform:rotateY(-16deg)_rotateX(6deg)] group-hover:[transform:rotateY(-9deg)_rotateX(3deg)]">
-        <div className="overflow-hidden rounded-[0.6rem] border border-fg/15 bg-ink-3 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.75),0_0_0_1px_rgba(0,0,0,0.4)]">
+        <div
+          className="overflow-hidden rounded-[0.6rem] border border-fg/15 bg-ink-3"
+          style={{ boxShadow: `0 40px 80px -20px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.4), 0 0 90px -10px ${primary}66` }}
+        >
           <div className="flex h-[3.2%] min-h-3 items-center gap-1 border-b border-fg/10 bg-ink-4 px-2.5" aria-hidden="true">
             {[0, 1, 2].map((i) => (
               <span key={i} className="size-1.5 rounded-full bg-fg/25" />
