@@ -31,6 +31,7 @@ function resolveState(target: EventTarget | null): CursorState {
 export function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
   const [state, setState] = useState<CursorState>("default");
   const [visible, setVisible] = useState(false);
@@ -43,6 +44,21 @@ export function Cursor() {
     mql.addEventListener("change", sync);
     return () => mql.removeEventListener("change", sync);
   }, []);
+
+  // <dialog> modal vive na top layer, acima de qualquer z-index. O cursor também
+  // vai para lá (popover) e é reerguido sempre que um dialog abre, para ficar por cima.
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!enabled || !layer || typeof layer.showPopover !== "function") return;
+    const raise = () => {
+      if (layer.matches(":popover-open")) layer.hidePopover();
+      layer.showPopover();
+    };
+    raise();
+    const observer = new MutationObserver(raise);
+    observer.observe(document.body, { subtree: true, attributeFilter: ["open"] });
+    return () => observer.disconnect();
+  }, [enabled]);
 
   useEffect(() => {
     const dot = dotRef.current;
@@ -93,7 +109,14 @@ export function Cursor() {
   const hasLabel = Boolean(label);
 
   return (
-    <div aria-hidden="true" className={cn("pointer-events-none fixed inset-0 z-[90] transition-opacity duration-300", visible && state !== "hidden" ? "opacity-100" : "opacity-0")}>
+    <div
+      ref={layerRef}
+      popover="manual"
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none fixed inset-0 z-[90] m-0 size-full max-h-none max-w-none overflow-visible border-0 bg-transparent p-0 transition-opacity duration-300", visible && state !== "hidden" ? "opacity-100" : "opacity-0",
+      )}
+    >
       <div ref={ringRef} className="absolute left-0 top-0">
         <div
           className={cn(
