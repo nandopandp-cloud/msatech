@@ -10,8 +10,8 @@ export type Stat = {
 };
 
 export const stats: Stat[] = [
-  { value: 35, label: "Projetos entregues" },
-  { value: 30, label: "Clientes atendidos" },
-  { value: 23, label: "Segmentos de mercado" },
+  { value: 35, prefix: "+",label: "Projetos entregues" },
+  { value: 30, prefix: "+", label: "Clientes atendidos" },
+  { value: 23, prefix: "+", label: "Segmentos de mercado" },
   { value: 20, prefix: "+", label: "Anos de experiência" },
 ];
