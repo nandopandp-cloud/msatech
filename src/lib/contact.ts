@@ -31,7 +31,7 @@ export function validateContact(data: Partial<ContactPayload>): ContactErrors {
   const digits = (data.phone ?? "").replace(/\D/g, "");
   if (digits.length > 0 && (digits.length < 10 || digits.length > 13)) errors.phone = "Telefone incompleto.";
   if (!data.message || data.message.trim().length < 10)
-    errors.message = "Conte um pouco mais — algumas linhas já ajudam.";
+    errors.message = "Conte um pouco mais. Algumas linhas já ajudam.";
   return errors;
 }
 

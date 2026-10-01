@@ -26,7 +26,7 @@ export function Why() {
             </h2>
           </div>
           <p data-reveal className="t-lead max-w-[26rem] text-fg/55 lg:col-span-4 lg:col-start-9">
-            Não é uma lista de serviços. É o jeito como decidimos — em cada projeto, em cada detalhe.
+            Não é uma lista de serviços. É o jeito como decidimos, em cada projeto, em cada detalhe.
           </p>
         </div>
 

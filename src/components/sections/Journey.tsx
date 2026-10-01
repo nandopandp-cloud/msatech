@@ -130,7 +130,7 @@ export function Journey() {
             <span aria-hidden="true" className="absolute inset-x-0 top-full h-14 bg-gradient-to-b from-ink to-transparent lg:hidden" />
             <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0" />
             <span className="t-micro absolute bottom-4 left-[clamp(1rem,4vw,4.5rem)] text-fg/35 lg:hidden">
-              {current.index} — {current.title}
+              {current.index} / {current.title}
             </span>
           </div>
 

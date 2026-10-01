@@ -1,6 +1,6 @@
 /**
- * Indicadores de capacidade. `value: null` exibe "XX" até termos o número real.
- * Ao preencher `value`, o contador anima de 0 até o valor automaticamente.
+ * Indicadores de capacidade. O contador anima de 0 até `value` ao entrar na tela.
+ * `value: null` exibe "XX" (útil para um indicador ainda não confirmado).
  */
 export type Stat = {
   value: number | null;
@@ -10,8 +10,8 @@ export type Stat = {
 };
 
 export const stats: Stat[] = [
-  { value: null, prefix: "+", label: "Projetos entregues" },
-  { value: null, suffix: "+", label: "Clientes atendidos" },
-  { value: null, label: "Segmentos de mercado" },
-  { value: null, label: "Anos de experiência" },
+  { value: 35, label: "Projetos entregues" },
+  { value: 30, label: "Clientes atendidos" },
+  { value: 23, label: "Segmentos de mercado" },
+  { value: 20, prefix: "+", label: "Anos de experiência" },
 ];

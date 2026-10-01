@@ -11,12 +11,37 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const PLACEHOLDER = "XX";
 
+/** Caixa útil dentro do bloco e área alvo: logos largas e compactas ganham o mesmo peso visual. */
+const LOGO_MAX_W = 150;
+const LOGO_MAX_H = 46;
+const LOGO_AREA = 6200;
+
+function logoSize({ width, height }: Client) {
+  if (!width || !height) return null;
+  const ratio = width / height;
+  const h = Math.min(LOGO_MAX_H, Math.sqrt(LOGO_AREA / ratio), LOGO_MAX_W / ratio);
+  return { width: Math.round(h * ratio), height: Math.round(h) };
+}
+
 function ClientSlot({ client, duplicate }: { client: Client; duplicate?: boolean }) {
+  const size = client.logo ? logoSize(client) : null;
   return (
-    <li aria-hidden={duplicate || undefined} className="group flex h-24 w-[13rem] shrink-0 items-center justify-center rounded-2xl border border-line transition-colors duration-500 hover:border-orange/40 md:h-28 md:w-[15rem]">
-      {client.logo ? (
-        // eslint-disable-next-line @next/next/no-img-element -- SVGs de logo monocromáticos, sem ganho com otimização
-        <img src={client.logo} alt={client.name} className="max-h-10 w-auto max-w-[70%] opacity-60 transition-opacity duration-500 group-hover:opacity-100" loading="lazy" />
+    <li
+      aria-hidden={duplicate || undefined}
+      className="group flex h-24 w-[13rem] shrink-0 items-center justify-center rounded-2xl border border-line transition-colors duration-500 hover:border-orange/40 md:h-28 md:w-[15rem]"
+    >
+      {client.logo && size ? (
+        // eslint-disable-next-line @next/next/no-img-element -- PNGs pequenos e já otimizados, sem ganho com o otimizador
+        <img
+          src={client.logo}
+          alt={duplicate ? "" : client.name}
+          width={size.width}
+          height={size.height}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="opacity-65 grayscale transition-[opacity,filter] duration-500 ease-[var(--ease-out-expo)] group-hover:opacity-100 group-hover:grayscale-0 [@media(hover:none)]:opacity-85 [@media(hover:none)]:grayscale-0"
+        />
       ) : (
         <span className="flex items-center gap-3 text-fg/35 transition-colors duration-500 group-hover:text-fg">
           <span aria-hidden="true" className="size-2 bg-current transition-colors duration-500 group-hover:bg-orange" />

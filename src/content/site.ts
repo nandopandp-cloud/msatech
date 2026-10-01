@@ -6,7 +6,7 @@
 export const site = {
   name: "MSATech",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://msatech.com.br",
-  title: "MSATech — Estratégia, Design, Tecnologia e Experiência",
+  title: "MSATech | Estratégia, Design, Tecnologia e Experiência",
   description:
     "A MSATech conecta estratégia, branding, design, experiência e tecnologia para criar soluções digitais personalizadas que movem negócios.",
   tagline: "Strategy. Brand. Experience. Technology.",

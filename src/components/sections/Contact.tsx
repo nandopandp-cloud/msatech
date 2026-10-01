@@ -13,7 +13,7 @@ type Status = "idle" | "sending" | "success" | "error";
 const EMPTY: ContactPayload = { name: "", company: "", email: "", phone: "", message: "", interests: [] };
 
 const NEXT_STEPS = [
-  { title: "Lemos com atenção", text: "Cada mensagem é lida por alguém do time — não por um robô de triagem." },
+  { title: "Lemos com atenção", text: "Cada mensagem é lida por alguém do time, não por um robô de triagem." },
   { title: "Conversa de imersão", text: "Um papo para entender contexto, objetivos e o que está em jogo." },
   { title: "Proposta sob medida", text: "Um caminho desenhado para o seu desafio, não um pacote pronto." },
 ];

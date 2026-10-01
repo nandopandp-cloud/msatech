@@ -61,7 +61,7 @@ export function CaseCard({ item, index, total, aspect, onOpen }: CaseCardProps) 
     </div>
   );
 
-  const label = `${item.client} — ${item.title}. Ver projeto`;
+  const label = `${item.client}, ${item.title}. Ver projeto`;
 
   return item.href ? (
     <a href={item.href} className="group block" data-cursor="explore" aria-label={label}>

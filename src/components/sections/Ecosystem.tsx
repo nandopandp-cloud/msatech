@@ -104,7 +104,7 @@ export function Ecosystem() {
               >
                 <span className={cn("flex items-center gap-3 font-semibold tracking-[-0.01em]", layer.highlight && "text-orange")}>
                   <span aria-hidden="true" className={cn("size-1.5", layer.highlight ? "bg-orange" : "bg-fg/40")} />
-                  {layer.highlight ? "MSATech — Tecnologia" : layer.title}
+                  {layer.highlight ? "MSATech · Tecnologia" : layer.title}
                 </span>
                 <span className="text-right text-sm text-fg/45">{layer.note}</span>
               </li>

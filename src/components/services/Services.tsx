@@ -127,7 +127,7 @@ export function Services() {
                 Tudo começa com o <span className="text-orange-deep">desafio.</span>
               </h2>
               <p data-reveal className="t-lead mt-6 max-w-[26rem] text-paper-ink/60">
-                Seis disciplinas, uma única conversa. Explore cada pilar — na prática, eles nunca trabalham sozinhos.
+                Seis disciplinas, uma única conversa. Explore cada pilar. Na prática, eles nunca trabalham sozinhos.
               </p>
 
               {/* Painel de conteúdo das tabs (desktop) */}
@@ -140,7 +140,7 @@ export function Services() {
               >
                 <div key={current.id} className="animate-[fade-in_0.9s_var(--ease-out-expo)]">
                   <p className="t-micro text-paper-ink/45">
-                    {current.index} — {current.title}
+                    {current.index} / {current.title}
                   </p>
                   <p className="mt-4 text-[1.6rem] font-semibold leading-[1.15] tracking-[-0.03em]">{current.statement}</p>
                   <ul className="mt-6 flex flex-wrap gap-2">

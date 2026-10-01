@@ -57,8 +57,8 @@ docs/reference/         referência visual usada na direção de arte
 Nada foi inventado: tudo que depende de dado real está marcado e centralizado em `src/content/`.
 
 - **Cases** — `content/cases.ts`. Troque `client`, `title`, `segment`, `year` e `story`. Troque a foto ilustrativa em `/public/images/cases/` e o campo `image` (`imagePosition` ajusta o enquadramento). Com `href`, o card vira link para uma página dedicada; sem `href`, abre no modal.
-- **Números** — `content/stats.ts`. `value: null` exibe "XX"; ao informar um número, o count-up acontece automaticamente.
-- **Clientes** — `content/clients.ts`. Informe `name` e `logo` (SVG monocromático claro em `/public/clients/`).
+- **Números** (`content/stats.ts`): 35 projetos, 30 clientes, 23 segmentos, +20 anos. O contador anima de 0 até `value`; `value: null` volta a exibir "XX".
+- **Clientes** (`content/clients.ts`): logos em PNG transparente, versão clara para fundo escuro, em `/public/clients/`. Informe `width`/`height` reais do arquivo. Cinza por padrão, cor no hover.
 - **Contato e redes** — `content/site.ts` (`contact.email`, `contact.phone`, `social[].href`, `group.url`). Campos `null` não aparecem.
 - **Formulário** — a validação é compartilhada (`lib/contact.ts`). Para integrar CRM/e-mail/webhook, altere apenas `app/api/contact/route.ts`.
 

@@ -108,7 +108,7 @@ export function Manifesto() {
             <span key={pos} className={`absolute size-5 border-fg/60 ${pos}`} />
           ))}
           <div className="t-micro absolute inset-x-4 top-4 flex justify-between text-fg/45 md:inset-x-6 md:top-5">
-            <span>MSATech — Manifesto</span>
+            <span>MSATech / Manifesto</span>
             <span className="flex items-center gap-2">
               <span className="size-1.5 animate-[pulse-dot_1.6s_ease-in-out_infinite] rounded-full bg-orange" /> Rec
             </span>

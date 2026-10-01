@@ -84,7 +84,7 @@ export function Header() {
           )}
         />
         <div className={cn("container-x relative flex items-center justify-between transition-[height] duration-500", scrolled ? "h-16" : "h-20 md:h-24")}>
-          <a href="#top" aria-label="MSATech — voltar ao início" className="relative z-10 block" data-hero-in="header">
+          <a href="#top" aria-label="MSATech, voltar ao início" className="relative z-10 block" data-hero-in="header">
             <Logo className="h-6 w-auto md:h-7" />
           </a>
 

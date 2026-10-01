@@ -28,7 +28,7 @@ export function Footer() {
         <div className="grid gap-16 lg:grid-cols-12">
           <div className="lg:col-span-6">
             {/* Easter egg: no hover, os dois quadrados trocam de lugar. */}
-            <a href="#top" aria-label="MSATech — voltar ao início" className="logo-egg inline-block">
+            <a href="#top" aria-label="MSATech, voltar ao início" className="logo-egg inline-block">
               <Logo className="h-auto w-[min(70vw,420px)] overflow-visible" />
             </a>
             <p className="t-micro mt-8 text-fg/45">{site.tagline}</p>

@@ -110,7 +110,7 @@ export function Purpose() {
               <div className="absolute inset-x-0 bottom-0 h-[28%] bg-gradient-to-t from-ink/90 to-transparent" />
             </div>
             <figcaption className="t-micro absolute bottom-5 left-5 right-5 flex justify-between text-fg/55">
-              <span>Fig. 01 — O próximo horizonte</span>
+              <span>Fig. 01 · O próximo horizonte</span>
               <span className="hidden sm:inline">Sempre há um próximo passo</span>
             </figcaption>
           </div>

@@ -62,7 +62,7 @@ export function Cases() {
             </h2>
           </div>
           <p data-reveal className="t-lead max-w-[28rem] text-fg/55 lg:col-span-4 lg:col-start-9">
-            Cada projeto começa diferente — porque cada negócio é diferente. Aqui está o que construímos quando estratégia,
+            Cada projeto começa diferente, porque cada negócio é diferente. Aqui está o que construímos quando estratégia,
             design e tecnologia trabalham juntos.
           </p>
         </div>

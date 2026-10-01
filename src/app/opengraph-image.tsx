@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 
-export const alt = "MSATech — Estratégia, Design, Tecnologia e Experiência";
+export const alt = "MSATech | Estratégia, Design, Tecnologia e Experiência";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

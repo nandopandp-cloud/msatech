@@ -66,7 +66,7 @@ export function CaseModal({ item, next, onClose, onNavigate }: CaseModalProps) {
       {item && (
         <div ref={panelRef} data-lenis-prevent className="mx-auto mt-[4vh] h-[96vh] max-w-[1280px] overflow-y-auto rounded-t-[1.5rem] bg-ink-2 shadow-[0_-40px_120px_rgba(0,0,0,0.6)]">
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-ink-2/85 px-6 py-4 backdrop-blur-xl md:px-10">
-            <p className="t-micro text-fg/50">Case — {item.client}</p>
+            <p className="t-micro text-fg/50">Case · {item.client}</p>
             <button type="button" onClick={close} className="t-micro flex items-center gap-3 rounded-full border border-fg/20 px-4 py-2.5 transition-colors hover:border-orange hover:text-orange">
               Fechar <span aria-hidden="true">✕</span>
             </button>
