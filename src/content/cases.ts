@@ -60,12 +60,6 @@ export type CaseStudy = {
   };
 };
 
-const placeholderStory = {
-  challenge: "[Descreva aqui o desafio do cliente: contexto, problema e o que estava em jogo.]",
-  solution: "[Descreva a solução construída: decisões estratégicas, design e tecnologia.]",
-  result: "[Descreva o resultado com dados reais: indicadores, impacto e próximos passos.]",
-};
-
 export const cases: CaseStudy[] = [
   {
     slug: "eco1ne",
@@ -318,14 +312,111 @@ export const cases: CaseStudy[] = [
     ],
   },
   {
-    slug: "case-04",
-    image: "/images/cases/case-04.jpg",
-    client: "Cliente 04",
-    title: "Título do projeto 04",
-    segment: "Segmento",
-    year: "Ano",
-    services: ["Estratégia", "Branding", "Design"],
+    slug: "radar",
+    client: "Radar MSA",
+    title: "Demandas no radar, time no ritmo.",
+    segment: "Gestão de demandas",
+    year: "2026",
+    services: ["Produto", "Experiência", "Design", "Tecnologia"],
     art: "monolith",
-    story: placeholderStory,
+    showcase: {
+      screen: "/images/cases/radar/cover-screen.jpg",
+      width: 2400,
+      height: 1417,
+      colors: { primary: "#2563eb", secondary: "#38bdf8" },
+      chips: [
+        { label: "Radar Score", value: "70/100" },
+        { label: "Ofensiva Radar", value: "Dia 1 de 15" },
+      ],
+    },
+    intro:
+      "O Radar é a plataforma da MSA para gestão e controle das demandas dos times internos. Reúne gerenciamento, metas e gamificação num só lugar: a liderança enxerga o time inteiro em tempo real, e cada colaborador sabe exatamente o que fazer hoje — e tem um motivo para voltar amanhã.",
+    facts: [
+      { label: "Cliente", value: "MSA" },
+      { label: "Segmento", value: "Gestão de demandas internas" },
+      { label: "Entrega", value: "Plataforma de gestão, metas e gamificação" },
+      { label: "Perfis", value: "Gestores e colaboradores" },
+    ],
+    story: {
+      challenge:
+        "Demandas chegando por vários canais, prazos controlados de cabeça e pouca visibilidade sobre o que estava atrasado e quem estava sobrecarregado. Faltava um lugar único para organizar o trabalho — e um motivo para o time querer usá-lo todos os dias.",
+      solution:
+        "Uma plataforma com duas visões. A gestão acompanha prazos, responsáveis, categorias e prioridades num dashboard guiado pelo Radar Score. Cada colaborador organiza as próprias demandas em kanban, lista e calendário, com alertas automáticos. E a Ofensiva Radar transforma consistência em jogo.",
+      result:
+        "Demandas centralizadas, prazos visíveis antes de vencer e metas claras para cada pessoa. A liderança ganha um retrato fiel do time em tempo real, e o time ganha ritmo — 15 dias de consistência de cada vez.",
+    },
+    highlights: [
+      { title: "Radar Score", text: "Uma nota de 0 a 100 que resume o desempenho do time e aponta onde agir primeiro." },
+      { title: "Prazos sob controle", text: "Taxa de cumprimento, taxa de atraso e atraso médio, sempre comparados com o período anterior." },
+      { title: "Kanban, lista e calendário", text: "Cada colaborador escolhe como enxergar as próprias demandas — e arrasta os cartões para mudar a situação." },
+      { title: "Alertas automáticos", text: "Demandas prestes a vencer ou já atrasadas chegam a quem precisa agir, antes de virarem problema." },
+      { title: "Ofensiva Radar", text: "Gamificação de 15 dias de consistência: pequenas ações diárias, progresso visível e o time puxando o ritmo." },
+      { title: "Gestão do time", text: "Top responsáveis, demandas por categoria e prioridade, próximos prazos e relatório em PDF para a liderança." },
+    ],
+    screens: [
+      {
+        src: "/images/cases/radar/login.jpg",
+        width: 2400,
+        height: 1305,
+        alt: "Tela de acesso do Radar com a mensagem “Mais organização para o seu dia.” e o símbolo do radar",
+        title: "Mais organização para o seu dia.",
+        caption: "A marca nasce do próprio nome: um radar que varre as demandas e mostra o que precisa de atenção.",
+        chrome: "radar · Bem-vindo ao Radar",
+        layout: "wide",
+      },
+      {
+        src: "/images/cases/radar/dashboard.jpg",
+        width: 2000,
+        height: 2674,
+        alt: "Dashboard do Radar com Radar Score, taxas de cumprimento e atraso, evolução de demandas, top responsáveis, status, prioridade e próximos prazos",
+        title: "A visão da liderança",
+        caption: "O panorama do time numa rolagem: do Radar Score aos próximos prazos, com cada indicador comparado ao período anterior.",
+        points: ["Radar Score e indicadores de prazo", "Evolução de demandas por situação", "Top responsáveis e prioridades", "Demandas recentes e próximos prazos"],
+        chrome: "radar · Dashboard",
+        layout: "scroll",
+      },
+      {
+        src: "/images/cases/radar/kanban.jpg",
+        width: 2400,
+        height: 1492,
+        alt: "Tela Minhas demandas do Radar em kanban com colunas Atrasadas, Em aberto, Em andamento e Concluídas",
+        title: "Minhas demandas",
+        caption: "Tudo o que o colaborador lançou, em um só lugar — em kanban ou lista. Arrastar um cartão é tudo o que precisa para atualizar a situação.",
+        chrome: "radar · Minhas demandas",
+        layout: "wide",
+      },
+      {
+        src: "/images/cases/radar/calendario.jpg",
+        width: 2000,
+        height: 1832,
+        alt: "Calendário do Radar com demandas por dia, filtros por situação, minicalendário e resumo do mês",
+        title: "O mês inteiro à vista",
+        caption: "Prazos no calendário, filtros por situação e o resumo do mês ao lado — para planejar a semana sem surpresas.",
+        points: ["Demandas por dia, com cor por situação", "Filtros de atrasadas, em aberto e concluídas", "Resumo do mês", "Demandas do dia com criação rápida"],
+        chrome: "radar · Calendário",
+        layout: "scroll",
+      },
+      {
+        src: "/images/cases/radar/ofensiva.jpg",
+        width: 2400,
+        height: 1302,
+        alt: "Modal da Ofensiva Radar com um foguete, a mensagem “começou hoje!” e o progresso de 15 dias de consistência",
+        title: "Ofensiva Radar",
+        caption: "A gamificação que dá ritmo ao time: 15 dias de consistência, um passo por dia. Pequenas ações diárias geram grandes resultados.",
+        chrome: "radar · Ofensiva Radar",
+        kicker: "Gamificação",
+        layout: "wide",
+      },
+      {
+        src: "/images/cases/radar/key-visual.jpg",
+        width: 1672,
+        height: 941,
+        alt: "Key visual do Radar: “Organiza hoje. Impulsiona amanhã.” com o dashboard no notebook, o calendário no celular e o kanban",
+        title: "Organiza hoje. Impulsiona amanhã.",
+        caption: "Key visual de lançamento: dashboard, calendário no celular e kanban contando a mesma história de produtividade.",
+        kicker: "Divulgação",
+        layout: "wide",
+      },
+    ],
   },
 ];

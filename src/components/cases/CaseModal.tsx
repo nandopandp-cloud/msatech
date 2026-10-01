@@ -168,7 +168,12 @@ export function CaseModal({ item, next, onClose, onNavigate }: CaseModalProps) {
                 <p className="t-micro text-orange">Por dentro do produto</p>
                 <div className="mt-12 space-y-20 md:space-y-28">
                   {item.screens.map((screen, i) => (
-                    <CaseScreenFigure key={screen.src} screen={screen} index={i} />
+                    <CaseScreenFigure
+                      key={screen.src}
+                      screen={screen}
+                      index={i}
+                      flip={item.screens!.slice(0, i).filter((s) => s.layout === "scroll").length % 2 === 1}
+                    />
                   ))}
                 </div>
               </div>
@@ -198,11 +203,13 @@ export function CaseModal({ item, next, onClose, onNavigate }: CaseModalProps) {
   );
 }
 
-/** Tela do produto: inteira ("wide") ou percorrida pela rolagem ("scroll"), com texto ao lado. */
-function CaseScreenFigure({ screen, index }: { screen: CaseScreen; index: number }) {
+/**
+ * Tela do produto: inteira ("wide") ou percorrida pela rolagem ("scroll"), com texto ao lado.
+ * `flip` alterna o lado entre telas "scroll" consecutivas.
+ */
+function CaseScreenFigure({ screen, index, flip }: { screen: CaseScreen; index: number; flip: boolean }) {
   const number = String(index + 1).padStart(2, "0");
   const scroll = screen.layout === "scroll";
-  const flip = scroll && index % 2 === 0;
 
   const frame = (
     <div className={cn("overflow-hidden", screen.chrome && "rounded-[0.9rem] border border-fg/12 bg-ink-3 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)]", !screen.chrome && "rounded-[1.25rem]")}>
