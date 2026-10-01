@@ -1,0 +1,315 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* ==========================================================================
+   MSATech — Design tokens
+   Cores extraídas da marca: laranja #F17631 · petróleo #02474F · branco.
+   ========================================================================== */
+
+@theme {
+  --color-ink: #050607;
+  --color-ink-2: #0a0c0d;
+  --color-ink-3: #111415;
+  --color-ink-4: #181c1d;
+  --color-fg: #eeece7;
+  --color-muted: #9a9d9b;
+  --color-subtle: #5f6362;
+  --color-line: rgb(238 236 231 / 0.1);
+  --color-orange: #f17631;
+  --color-orange-soft: #ff9b5e;
+  --color-orange-deep: #b8501a;
+  --color-teal: #02474f;
+  --color-teal-light: #0d6b75;
+  --color-paper: #e9e7e2;
+  --color-paper-2: #dddad3;
+  --color-paper-ink: #0d0f10;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --breakpoint-3xl: 1920px;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, "SFMono-Regular", monospace;
+}
+
+/* ==========================================================================
+   Tipografia expressiva
+   ========================================================================== */
+
+@utility t-display {
+  font-size: clamp(2.75rem, 6.2vw, 7.25rem);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+
+@utility t-mega {
+  font-size: clamp(3rem, 10.5vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 600;
+}
+
+@utility t-h2 {
+  font-size: clamp(2.35rem, 4.6vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+@utility t-h3 {
+  font-size: clamp(1.6rem, 2.4vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+@utility t-lead {
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+@utility t-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@utility t-micro {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 4.5rem);
+  max-width: 1760px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --header-h: 4.5rem;
+  }
+
+  html {
+    background: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-orange);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img,
+  svg,
+  canvas {
+    display: block;
+  }
+}
+
+/* Cursor customizado — o nativo só é ocultado quando o customizado está ativo. */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"],
+html.has-cursor label {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text;
+}
+
+/* Máscaras do SplitText: espaço extra para descendentes (g, p, ç). */
+.split-line-mask {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* Hero: escondido antes da hidratação apenas quando o movimento será executado. */
+html.js-motion [data-hero-in] {
+  visibility: hidden;
+}
+
+/* Intro: nunca exibida se já vista nesta sessão ou com movimento reduzido. */
+html[data-intro="skip"] .intro-overlay {
+  display: none;
+}
+
+/* Textura de grão sutil — dá materialidade às superfícies escuras. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Sublinhado animado para links textuais. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Quadrado da marca — o "pixel" que atravessa toda a página. */
+.brand-square {
+  display: inline-block;
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--color-orange);
+}
+
+/* Marquee de clientes */
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+/* Visuais generativos dos serviços: animam somente quando o painel está ativo. */
+.svc-anim {
+  animation-play-state: paused;
+}
+.is-active .svc-anim {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: scaleY(0.82);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Easter egg do rodapé: os quadrados da marca trocam de posição. */
+.logo-egg [data-part="square"] {
+  transition: transform 0.9s var(--ease-out-expo);
+}
+.logo-egg:hover [data-part="square"]:nth-of-type(3) {
+  transform: translate(55.8px, 55.8px);
+}
+.logo-egg:hover [data-part="square"]:nth-of-type(4) {
+  transform: translate(-55.8px, -55.8px);
+}
+
+.split-word-mask {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
