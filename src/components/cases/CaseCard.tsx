@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { cn } from "@/lib/cn";
 import type { CaseStudy } from "@/content/cases";
 import { useTilt } from "@/hooks/useTilt";
 import { Arrow } from "@/components/ui/Arrow";
-import { CaseArt } from "./CaseArt";
+import { CaseCover } from "./CaseCover";
 
 type CaseCardProps = {
   item: CaseStudy;
@@ -23,11 +22,7 @@ export function CaseCard({ item, index, total, aspect, onOpen }: CaseCardProps) 
   const body = (
     <div ref={tiltRef} className={cn("relative overflow-hidden rounded-[1.25rem] bg-ink-3", aspect)}>
       <div data-case-media className="absolute inset-0 transition-transform duration-[1400ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]">
-        {item.image ? (
-          <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: item.imagePosition }} />
-        ) : (
-          <CaseArt variant={item.art} />
-        )}
+        <CaseCover item={item} sizes="(min-width: 1024px) 50vw, 100vw" />
       </div>
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/10 transition-opacity duration-700 group-hover:opacity-90" />
       <div aria-hidden="true" className="absolute inset-0 bg-ink/0 transition-colors duration-700 group-hover:bg-ink/25" />
