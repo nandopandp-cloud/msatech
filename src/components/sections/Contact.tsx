@@ -77,6 +77,7 @@ export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState("");
   const successRef = useRef<HTMLDivElement>(null);
+  const honeypot = useRef<HTMLInputElement>(null);
   useReveal(rootRef);
 
   const update = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -101,7 +102,7 @@ export function Contact() {
       return;
     }
     setStatus("sending");
-    const result = await submitContact(data);
+    const result = await submitContact({ ...data, website: honeypot.current?.value ?? "" });
     if (result.ok) {
       setStatus("success");
       setData(EMPTY);
@@ -165,6 +166,7 @@ export function Contact() {
               </div>
             ) : (
               <form noValidate onSubmit={submit} aria-describedby="form-note" className="grid gap-x-8 gap-y-10 md:grid-cols-2" data-reveal>
+                <input ref={honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
                 <Field name="name" label="Nome" value={data.name} onChange={update} error={errors.name} required autoComplete="name" />
                 <Field name="company" label="Empresa" value={data.company} onChange={update} autoComplete="organization" />
                 <Field name="email" label="E-mail" type="email" inputMode="email" value={data.email} onChange={update} error={errors.email} required autoComplete="email" />

@@ -43,7 +43,7 @@ export function formatPhone(value: string) {
   return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
 }
 
-export async function submitContact(payload: ContactPayload): Promise<{ ok: true } | { ok: false; error: string }> {
+export async function submitContact(payload: ContactPayload & { website?: string }): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const res = await fetch("/api/contact", {
       method: "POST",
