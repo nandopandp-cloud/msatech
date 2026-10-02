@@ -59,7 +59,7 @@ export function Footer() {
                 </li>
               </ul>
             </div>
-            <div>
+            {/* <div>
               <p className="t-micro text-fg/35">Redes</p>
               <ul className="mt-5 flex gap-3">
                 {site.social.map((s) => (
@@ -76,7 +76,7 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </nav>
         </div>
 
